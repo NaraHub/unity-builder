@@ -18,6 +18,7 @@ export class TaskParameterSerializer {
     'RUNNER_TEMP_PATH',
     'NAME',
     'CUSTOM_JOB',
+    'UNITY_LICENSE',
   ]);
   public static createCloudRunnerEnvironmentVariables(
     buildParameters: BuildParameters,
@@ -171,7 +172,7 @@ export class TaskParameterSerializer {
     array = TaskParameterSerializer.tryAddInput(array, 'UNITY_EMAIL');
     array = TaskParameterSerializer.tryAddInput(array, 'UNITY_PASSWORD');
 
-    // array = TaskParameterSerializer.tryAddInput(array, 'UNITY_LICENSE');
+    array = TaskParameterSerializer.tryAddInput(array, 'UNITY_LICENSE');
     array = TaskParameterSerializer.tryAddInput(array, 'GIT_PRIVATE_TOKEN');
 
     return array;
