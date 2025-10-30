@@ -6431,6 +6431,7 @@ TaskParameterSerializer.blockedParameterNames = new Set([
     'RUNNER_TEMP_PATH',
     'NAME',
     'CUSTOM_JOB',
+    'unityLicense',
     'UNITY_LICENSE',
 ]);
 

@@ -18,6 +18,7 @@ export class TaskParameterSerializer {
     'RUNNER_TEMP_PATH',
     'NAME',
     'CUSTOM_JOB',
+    'unityLicense',
     'UNITY_LICENSE',
   ]);
   public static createCloudRunnerEnvironmentVariables(
