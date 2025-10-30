@@ -152,7 +152,7 @@ export class AWSJobStack {
       await waitUntilStackCreateComplete(
         {
           client: CF,
-          maxWaitTime: 200,
+          maxWaitTime: 1800,
         },
         { StackName: taskDefStackName },
       );

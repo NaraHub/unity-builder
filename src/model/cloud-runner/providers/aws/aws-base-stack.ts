@@ -78,7 +78,7 @@ export class AWSBaseStack {
         await waitUntilStackCreateComplete(
           {
             client: CF,
-            maxWaitTime: 600,
+            maxWaitTime: 1800,
           },
           describeStackInput,
         );
@@ -112,7 +112,7 @@ export class AWSBaseStack {
           await waitUntilStackUpdateComplete(
             {
               client: CF,
-              maxWaitTime: 200,
+              maxWaitTime: 1800,
             },
             describeStackInput,
           );

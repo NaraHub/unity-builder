@@ -115,7 +115,7 @@ class AWSTaskRunner {
       await waitUntilTasksRunning(
         {
           client: AwsClientFactory.getECS(),
-          maxWaitTime: 300,
+          maxWaitTime: 1800,
           minDelay: 5,
           maxDelay: 30,
         },

@@ -1603,7 +1603,7 @@ class AWSBaseStack {
             if (stack.StackStatus === 'CREATE_IN_PROGRESS') {
                 await (0, client_cloudformation_1.waitUntilStackCreateComplete)({
                     client: CF,
-                    maxWaitTime: 600,
+                    maxWaitTime: 1800,
                 }, describeStackInput);
             }
             if (stackExists) {
@@ -1634,7 +1634,7 @@ class AWSBaseStack {
                 if (stack.StackStatus === 'UPDATE_IN_PROGRESS') {
                     await (0, client_cloudformation_1.waitUntilStackUpdateComplete)({
                         client: CF,
-                        maxWaitTime: 200,
+                        maxWaitTime: 1800,
                     }, describeStackInput);
                 }
             }
@@ -1933,7 +1933,7 @@ class AWSJobStack {
             await CF.send(new client_cloudformation_1.CreateStackCommand(createStackInput));
             await (0, client_cloudformation_1.waitUntilStackCreateComplete)({
                 client: CF,
-                maxWaitTime: 200,
+                maxWaitTime: 1800,
             }, { StackName: taskDefStackName });
             const describeStack = await CF.send(new client_cloudformation_1.DescribeStacksCommand({ StackName: taskDefStackName }));
             for (const parameter of parameters) {
@@ -2124,7 +2124,7 @@ class AWSTaskRunner {
         try {
             await (0, client_ecs_1.waitUntilTasksRunning)({
                 client: aws_client_factory_1.AwsClientFactory.getECS(),
-                maxWaitTime: 300,
+                maxWaitTime: 1800,
                 minDelay: 5,
                 maxDelay: 30,
             }, { tasks: [taskArn], cluster });
@@ -3117,13 +3117,13 @@ class AWSBuildEnvironment {
         }
         await (0, client_cloudformation_1.waitUntilStackDeleteComplete)({
             client: CF,
-            maxWaitTime: 200,
+            maxWaitTime: 1800,
         }, {
             StackName: taskDef.taskDefStackName,
         });
         await (0, client_cloudformation_1.waitUntilStackDeleteComplete)({
             client: CF,
-            maxWaitTime: 200,
+            maxWaitTime: 1800,
         }, {
             StackName: `${taskDef.taskDefStackName}-cleanup`,
         });

@@ -139,7 +139,7 @@ class AWSBuildEnvironment implements ProviderInterface {
     await waitUntilStackDeleteComplete(
       {
         client: CF,
-        maxWaitTime: 200,
+        maxWaitTime: 1800,
       },
       {
         StackName: taskDef.taskDefStackName,
@@ -148,7 +148,7 @@ class AWSBuildEnvironment implements ProviderInterface {
     await waitUntilStackDeleteComplete(
       {
         client: CF,
-        maxWaitTime: 200,
+        maxWaitTime: 1800,
       },
       {
         StackName: `${taskDef.taskDefStackName}-cleanup`,
