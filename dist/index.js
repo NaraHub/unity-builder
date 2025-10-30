@@ -1599,7 +1599,7 @@ class AWSBaseStack {
             if (stack.StackStatus === 'CREATE_IN_PROGRESS') {
                 await (0, client_cloudformation_1.waitUntilStackCreateComplete)({
                     client: CF,
-                    maxWaitTime: 200,
+                    maxWaitTime: 600,
                 }, describeStackInput);
             }
             if (stackExists) {
@@ -6398,7 +6398,7 @@ class TaskParameterSerializer {
         array = TaskParameterSerializer.tryAddInput(array, 'UNITY_SERIAL');
         array = TaskParameterSerializer.tryAddInput(array, 'UNITY_EMAIL');
         array = TaskParameterSerializer.tryAddInput(array, 'UNITY_PASSWORD');
-        // array = TaskParameterSerializer.tryAddInput(array, 'UNITY_LICENSE');
+        array = TaskParameterSerializer.tryAddInput(array, 'UNITY_LICENSE');
         array = TaskParameterSerializer.tryAddInput(array, 'GIT_PRIVATE_TOKEN');
         return array;
     }
@@ -6431,6 +6431,7 @@ TaskParameterSerializer.blockedParameterNames = new Set([
     'RUNNER_TEMP_PATH',
     'NAME',
     'CUSTOM_JOB',
+    'UNITY_LICENSE',
 ]);
 
 
