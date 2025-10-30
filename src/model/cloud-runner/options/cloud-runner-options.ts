@@ -135,6 +135,10 @@ class CloudRunnerOptions {
     return CloudRunnerOptions.getInput('containerMemory') || `3072`;
   }
 
+  static get ephemeralStorage(): string {
+    return CloudRunnerOptions.getInput('ephemeralStorage') || `100`;
+  }
+
   static get customJob(): string {
     return CloudRunnerOptions.getInput('customJob') || '';
   }

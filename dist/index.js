@@ -331,6 +331,7 @@ class BuildParameters {
             kubeConfig: cloud_runner_options_1.default.kubeConfig,
             containerMemory: cloud_runner_options_1.default.containerMemory,
             containerCpu: cloud_runner_options_1.default.containerCpu,
+            ephemeralStorage: cloud_runner_options_1.default.ephemeralStorage,
             kubeVolumeSize: cloud_runner_options_1.default.kubeVolumeSize,
             kubeVolume: cloud_runner_options_1.default.kubeVolume,
             postBuildContainerHooks: cloud_runner_options_1.default.postBuildContainerHooks,
@@ -1266,6 +1267,9 @@ class CloudRunnerOptions {
     }
     static get containerMemory() {
         return CloudRunnerOptions.getInput('containerMemory') || `3072`;
+    }
+    static get ephemeralStorage() {
+        return CloudRunnerOptions.getInput('ephemeralStorage') || `100`;
     }
     static get customJob() {
         return CloudRunnerOptions.getInput('customJob') || '';
@@ -2863,6 +2867,10 @@ Parameters:
     Default: ${cloud_runner_1.default.buildParameters.containerMemory}
     Type: Number
     Description: How much memory in megabytes to give the container
+  EphemeralStorage:
+    Default: ${cloud_runner_1.default.buildParameters.ephemeralStorage}
+    Type: Number
+    Description: How much ephemeral storage in GB to give the task (minimum 21, maximum 200)
   BUILDGUID:
     Type: String
     Default: ''
@@ -2917,6 +2925,8 @@ Resources:
       Cpu: !Ref ContainerCpu
       Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
+      EphemeralStorage:
+        SizeInGiB: !Ref EphemeralStorageSize
       Volumes:
         - Name: efs-data
           EFSVolumeConfiguration:

@@ -202,6 +202,9 @@ inputs:
     default: ''
     required: false
     description: '[CloudRunner] Amount of memory to assign the remote build container'
+  ephemeralStorageSize: # Add this parameter
+    default: '100'
+    description: '[CloudRunner] How much ephemeral storage in GB to give the task (minimum 21, maximum 200)'
   readInputFromOverrideList:
     default: ''
     required: false

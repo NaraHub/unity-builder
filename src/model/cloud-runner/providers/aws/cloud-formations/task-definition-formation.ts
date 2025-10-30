@@ -36,6 +36,10 @@ Parameters:
     Default: ${CloudRunner.buildParameters.containerMemory}
     Type: Number
     Description: How much memory in megabytes to give the container
+  EphemeralStorage:
+    Default: ${CloudRunner.buildParameters.ephemeralStorage}
+    Type: Number
+    Description: How much ephemeral storage in GB to give the task (minimum 21, maximum 200)
   BUILDGUID:
     Type: String
     Default: ''
@@ -90,6 +94,8 @@ Resources:
       Cpu: !Ref ContainerCpu
       Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
+      EphemeralStorage:
+        SizeInGiB: !Ref EphemeralStorageSize
       Volumes:
         - Name: efs-data
           EFSVolumeConfiguration:
