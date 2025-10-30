@@ -36,7 +36,7 @@ Parameters:
     Default: ${CloudRunner.buildParameters.containerMemory}
     Type: Number
     Description: How much memory in megabytes to give the container
-  EphemeralStorage:
+  EphemeralStorageSize:
     Default: ${CloudRunner.buildParameters.ephemeralStorage}
     Type: Number
     Description: How much ephemeral storage in GB to give the task (minimum 21, maximum 200)
