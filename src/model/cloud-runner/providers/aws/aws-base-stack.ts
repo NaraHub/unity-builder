@@ -78,7 +78,7 @@ export class AWSBaseStack {
         await waitUntilStackCreateComplete(
           {
             client: CF,
-            maxWaitTime: 200,
+            maxWaitTime: 600,
           },
           describeStackInput,
         );
