@@ -2071,7 +2071,16 @@ class AWSTaskRunner {
                     },
                 ],
             },
-            launchType: `${cloud_runner_1.default.buildParameters.useSpotInstances ? 'FARGATE_SPOT' : 'FARGATE'}`,
+            launchType: cloud_runner_1.default.buildParameters.useSpotInstances ? undefined : 'FARGATE',
+            capacityProviderStrategy: cloud_runner_1.default.buildParameters.useSpotInstances
+                ? [
+                    {
+                        capacityProvider: 'FARGATE_SPOT',
+                        weight: 1,
+                        base: 0,
+                    },
+                ]
+                : undefined,
             networkConfiguration: {
                 awsvpcConfiguration: {
                     subnets: [SubnetOne, SubnetTwo],
