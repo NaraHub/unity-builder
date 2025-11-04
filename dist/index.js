@@ -2422,6 +2422,15 @@ Resources:
   # ECS Resources
   ECSCluster:
     Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref EnvironmentName
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+          Base: 0
 
   # A role used to allow AWS Autoscaling to inspect stats and adjust scaleable targets
   # on your AWS account
