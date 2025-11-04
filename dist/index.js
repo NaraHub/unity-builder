@@ -332,6 +332,7 @@ class BuildParameters {
             containerMemory: cloud_runner_options_1.default.containerMemory,
             containerCpu: cloud_runner_options_1.default.containerCpu,
             ephemeralStorage: cloud_runner_options_1.default.ephemeralStorage,
+            useSpotInstances: cloud_runner_options_1.default.useSpotInstances,
             kubeVolumeSize: cloud_runner_options_1.default.kubeVolumeSize,
             kubeVolume: cloud_runner_options_1.default.kubeVolume,
             postBuildContainerHooks: cloud_runner_options_1.default.postBuildContainerHooks,
@@ -1269,7 +1270,10 @@ class CloudRunnerOptions {
         return CloudRunnerOptions.getInput('containerMemory') || `3072`;
     }
     static get ephemeralStorage() {
-        return CloudRunnerOptions.getInput('ephemeralStorage') || `100`;
+        return CloudRunnerOptions.getInput('ephemeralStorageSize') || `100`;
+    }
+    static get useSpotInstances() {
+        return CloudRunnerOptions.getInput('useSpotInstances') || `false`;
     }
     static get customJob() {
         return CloudRunnerOptions.getInput('customJob') || '';
@@ -2067,7 +2071,7 @@ class AWSTaskRunner {
                     },
                 ],
             },
-            launchType: 'FARGATE',
+            launchType: `${cloud_runner_1.default.buildParameters.useSpotInstances ? 'FARGATE_SPOT' : 'FARGATE'}`,
             networkConfiguration: {
                 awsvpcConfiguration: {
                     subnets: [SubnetOne, SubnetTwo],

@@ -205,6 +205,10 @@ inputs:
   ephemeralStorageSize: # Add this parameter
     default: '100'
     description: '[CloudRunner] How much ephemeral storage in GB to give the task (minimum 21, maximum 200)'
+  useSpotInstances:
+    default: 'false'
+    required: false
+    description: '[CloudRunner] Whether to use spot instances for AWS builds'
   readInputFromOverrideList:
     default: ''
     required: false

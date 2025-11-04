@@ -45,7 +45,7 @@ class AWSTaskRunner {
           },
         ],
       },
-      launchType: 'FARGATE',
+      launchType: `${CloudRunner.buildParameters.useSpotInstances ? 'FARGATE_SPOT' : 'FARGATE'}`,
       networkConfiguration: {
         awsvpcConfiguration: {
           subnets: [SubnetOne, SubnetTwo],

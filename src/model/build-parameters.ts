@@ -68,6 +68,7 @@ class BuildParameters {
   public containerMemory!: string;
   public containerCpu!: string;
   public ephemeralStorage!: string;
+  public useSpotInstances!: string;
   public kubeVolumeSize!: string;
   public kubeVolume!: string;
   public kubeStorageClass!: string;
@@ -197,6 +198,7 @@ class BuildParameters {
       containerMemory: CloudRunnerOptions.containerMemory,
       containerCpu: CloudRunnerOptions.containerCpu,
       ephemeralStorage: CloudRunnerOptions.ephemeralStorage,
+      useSpotInstances: CloudRunnerOptions.useSpotInstances,
       kubeVolumeSize: CloudRunnerOptions.kubeVolumeSize,
       kubeVolume: CloudRunnerOptions.kubeVolume,
       postBuildContainerHooks: CloudRunnerOptions.postBuildContainerHooks,

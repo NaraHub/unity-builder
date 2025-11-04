@@ -136,7 +136,11 @@ class CloudRunnerOptions {
   }
 
   static get ephemeralStorage(): string {
-    return CloudRunnerOptions.getInput('ephemeralStorage') || `100`;
+    return CloudRunnerOptions.getInput('ephemeralStorageSize') || `100`;
+  }
+
+  static get useSpotInstances(): string {
+    return CloudRunnerOptions.getInput('useSpotInstances') || `false`;
   }
 
   static get customJob(): string {
