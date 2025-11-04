@@ -145,10 +145,11 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
+      ClusterName: !Ref EnvironmentName'
       CapacityProviders:
         - FARGATE
         - FARGATE_SPOT
-      DefaultCapacityProviderStrategy: # Recommended: ensures Fargate is always the default fallback
+      DefaultCapacityProviderStrategy:
         - CapacityProvider: FARGATE
           Weight: 1
           Base: 0
