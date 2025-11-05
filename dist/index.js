@@ -2147,11 +2147,13 @@ class AWSTaskRunner {
             await new Promise((resolve) => setTimeout(resolve, 3000));
             const taskAfterError = await AWSTaskRunner.describeTasks(cluster, taskArn);
             const containerState = taskAfterError?.containers?.[0];
-            if (containerState?.lastStatus === 'STOPPED' && containerState?.exitCode === 0) {
-                cloud_runner_logger_1.default.log(`Task completed successfully before reaching stable RUNNING state. Proceeding...`);
-                return; // Exit the function without throwing an error
+            const exitCode = containerState?.exitCode;
+            cloud_runner_logger_1.default.log(`Task exited with code: ${exitCode}`);
+            if (exitCode !== undefined && exitCode === 0) {
+                cloud_runner_logger_1.default.log(`Task completed successfully (Exit Code 0). Suppressing Waiter error.`);
+                return;
             }
-            cloud_runner_logger_1.default.log(`Cloud runner job has ended ${taskAfterError?.containers?.[0]?.lastStatus}`);
+            cloud_runner_logger_1.default.log(`Task failed or was interrupted. Propagating error.`);
             core.setFailed(error);
             core.error(error);
         }
