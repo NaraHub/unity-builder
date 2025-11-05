@@ -97,6 +97,7 @@ Resources:
       EphemeralStorage:
         SizeInGiB: !Ref EphemeralStorageSize
       Volumes:
+        - Name: work
         - Name: efs-data
           EFSVolumeConfiguration:
             FilesystemId:
@@ -130,8 +131,11 @@ Resources:
               Value: 'yes'
             # template - env vars
           MountPoints:
+            - SourceVolume: work
+              ContainerPath: /data
+              ReadOnly: false
             - SourceVolume: efs-data
-              ContainerPath: !Ref EFSMountDirectory
+              ContainerPath: /efs
               ReadOnly: false
           Secrets:
             # template secrets p3 - container def
