@@ -72,6 +72,7 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
           : '# skipping toolchain setup in local-docker or non-container provider'
       }
       ${setupHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
+      sh -c
       ${
         CloudRunner.buildParameters.providerStrategy === 'local-docker'
           ? `export GITHUB_WORKSPACE="${CloudRunner.buildParameters.dockerWorkspacePath}"
@@ -82,9 +83,11 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
       export LOG_FILE=${isContainerized ? '/home/job-log.txt' : '$(pwd)/temp/job-log.txt'}
       ${BuildAutomationWorkflow.setupCommands(builderPath, isContainerized)}
       ${setupHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
+      sh -c ${path.join(process.cwd(), `game-ci`, `command-hooks`, 'post-setup.sh ')} || true
       ${buildHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${BuildAutomationWorkflow.BuildCommands(builderPath, isContainerized)}
-      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}`;
+      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
+      sh -c ${path.join(process.cwd(), `game-ci`, `command-hooks`, 'post-build.sh ')} || true`;
   }
 
   private static setupCommands(builderPath: string, isContainerized: boolean) {

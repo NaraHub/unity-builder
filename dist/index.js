@@ -7145,6 +7145,7 @@ class BuildAutomationWorkflow {
             ? 'apt-get install -y curl tar tree npm git-lfs jq git > /dev/null || true\n      npm --version || true\n      npm i -g n > /dev/null || true\n      npm i -g semver > /dev/null || true\n      npm install --global yarn > /dev/null || true\n      n 20.8.0 || true\n      node --version || true'
             : '# skipping toolchain setup in local-docker or non-container provider'}
       ${setupHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
+      sh -c
       ${cloud_runner_1.default.buildParameters.providerStrategy === 'local-docker'
             ? `export GITHUB_WORKSPACE="${cloud_runner_1.default.buildParameters.dockerWorkspacePath}"
       echo "Using docker workspace: $GITHUB_WORKSPACE"`
@@ -7153,9 +7154,11 @@ class BuildAutomationWorkflow {
       export LOG_FILE=${isContainerized ? '/home/job-log.txt' : '$(pwd)/temp/job-log.txt'}
       ${BuildAutomationWorkflow.setupCommands(builderPath, isContainerized)}
       ${setupHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
+      sh -c ${node_path_1.default.join(process.cwd(), `game-ci`, `command-hooks`, 'post-setup.sh ')} || true
       ${buildHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${BuildAutomationWorkflow.BuildCommands(builderPath, isContainerized)}
-      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}`;
+      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
+      sh -c ${node_path_1.default.join(process.cwd(), `game-ci`, `command-hooks`, 'post-build.sh ')} || true`;
     }
     static setupCommands(builderPath, isContainerized) {
         // prettier-ignore
