@@ -71,8 +71,12 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
           ? 'apt-get install -y curl tar tree npm git-lfs jq git > /dev/null || true\n      npm --version || true\n      npm i -g n > /dev/null || true\n      npm i -g semver > /dev/null || true\n      npm install --global yarn > /dev/null || true\n      n 20.8.0 || true\n      node --version || true'
           : '# skipping toolchain setup in local-docker or non-container provider'
       }
+      ${
+        isContainerized && CloudRunner.buildParameters.providerStrategy === 'aws'
+          ? 'apt-get install -y python3-pip  > /dev/null || true \n pip install awscli || true'
+          : ''
+      }
       ${setupHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
-      sh -c
       ${
         CloudRunner.buildParameters.providerStrategy === 'local-docker'
           ? `export GITHUB_WORKSPACE="${CloudRunner.buildParameters.dockerWorkspacePath}"
