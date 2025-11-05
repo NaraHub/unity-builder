@@ -134,6 +134,14 @@ class AWSTaskRunner {
       const error = error_ as Error;
       await new Promise((resolve) => setTimeout(resolve, 3000));
       const taskAfterError = await AWSTaskRunner.describeTasks(cluster, taskArn);
+      const containerState = taskAfterError?.containers?.[0];
+
+      if (containerState?.lastStatus === 'STOPPED' && containerState?.exitCode === 0) {
+        CloudRunnerLogger.log(`Task completed successfully before reaching stable RUNNING state. Proceeding...`);
+
+        return; // Exit the function without throwing an error
+      }
+
       CloudRunnerLogger.log(`Cloud runner job has ended ${taskAfterError?.containers?.[0]?.lastStatus}`);
 
       core.setFailed(error);
