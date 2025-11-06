@@ -1065,7 +1065,7 @@ class CloudRunnerFolders {
         return node_path_1.default.join(CloudRunnerFolders.cacheFolderForCacheKeyFull, `Library`);
     }
     static get unityBuilderRepoUrl() {
-        return `https://${cloud_runner_1.default.buildParameters.gitPrivateToken}@github.com/game-ci/unity-builder.git`;
+        return `https://${cloud_runner_1.default.buildParameters.gitPrivateToken}@github.com/NaraHub/unity-builder.git`;
     }
     static get targetBuildRepoUrl() {
         return `https://${cloud_runner_1.default.buildParameters.gitPrivateToken}@github.com/${cloud_runner_1.default.buildParameters.githubRepo}.git`;
