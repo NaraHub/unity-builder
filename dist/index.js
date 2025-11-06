@@ -7156,11 +7156,12 @@ class BuildAutomationWorkflow {
       export LOG_FILE=${isContainerized ? '/home/job-log.txt' : '$(pwd)/temp/job-log.txt'}
       ${BuildAutomationWorkflow.setupCommands(builderPath, isContainerized)}
       ${setupHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
-      sh -c $GITHUB_WORKSPACE/$PROJECT_PATH/game-ci/script-hooks/post-setup.sh || true
+      mv $GITHUB_WORKSPACE/$PROJECT_PATH/game-ci/script-hooks /data/ || true
+      sh -c /data/script-hooks/post-setup.sh || true
       ${buildHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${BuildAutomationWorkflow.BuildCommands(builderPath, isContainerized)}
       ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
-      sh -c $GITHUB_WORKSPACE/$PROJECT_PATH/game-ci/script-hooks/post-build.sh || true`;
+      sh -c /data/script-hooks/post-build.sh || true`;
     }
     static setupCommands(builderPath, isContainerized) {
         // prettier-ignore
