@@ -71,11 +71,6 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
           ? 'apt-get install -y curl tar tree npm git-lfs jq git > /dev/null || true\n      npm --version || true\n      npm i -g n > /dev/null || true\n      npm i -g semver > /dev/null || true\n      npm install --global yarn > /dev/null || true\n      n 20.8.0 || true\n      node --version || true'
           : '# skipping toolchain setup in local-docker or non-container provider'
       }
-      ${
-        isContainerized && CloudRunner.buildParameters.providerStrategy === 'aws'
-          ? 'apt-get install -y python3-pip  > /dev/null || true \n pip install awscli || true'
-          : ''
-      }
       ${setupHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${
         CloudRunner.buildParameters.providerStrategy === 'local-docker'
@@ -87,12 +82,9 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
       export LOG_FILE=${isContainerized ? '/home/job-log.txt' : '$(pwd)/temp/job-log.txt'}
       ${BuildAutomationWorkflow.setupCommands(builderPath, isContainerized)}
       ${setupHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
-      mv $GITHUB_WORKSPACE/$PROJECT_PATH/game-ci/script-hooks /data/ || true
-      sh -c /data/script-hooks/post-setup.sh || true
       ${buildHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${BuildAutomationWorkflow.BuildCommands(builderPath, isContainerized)}
-      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}
-      sh -c /data/script-hooks/post-build.sh || true`;
+      ${buildHooks.filter((x) => x.hook.includes(`after`)).map((x) => x.commands) || ' '}`;
   }
 
   private static setupCommands(builderPath: string, isContainerized: boolean) {
