@@ -205,7 +205,7 @@ class BuildParameters {
       preBuildContainerHooks: CloudRunnerOptions.preBuildContainerHooks,
       customJob: CloudRunnerOptions.customJob,
       runNumber: Input.runNumber,
-      branch: Input.branch.replace('/head', '') || (await GitRepoReader.GetBranch()),
+      branch: Input.branch.replace('/head', '') || 'non-branch',
       cloudRunnerBranch: CloudRunnerOptions.cloudRunnerBranch.split('/').reverse()[0],
       cloudRunnerDebug: CloudRunnerOptions.cloudRunnerDebug,
       githubRepo: (Input.githubRepo ?? (await GitRepoReader.GetRemote())) || 'game-ci/unity-builder',

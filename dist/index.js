@@ -339,7 +339,7 @@ class BuildParameters {
             preBuildContainerHooks: cloud_runner_options_1.default.preBuildContainerHooks,
             customJob: cloud_runner_options_1.default.customJob,
             runNumber: input_1.default.runNumber,
-            branch: input_1.default.branch.replace('/head', '') || (await git_repo_1.GitRepoReader.GetBranch()),
+            branch: input_1.default.branch.replace('/head', '') || 'non-branch',
             cloudRunnerBranch: cloud_runner_options_1.default.cloudRunnerBranch.split('/').reverse()[0],
             cloudRunnerDebug: cloud_runner_options_1.default.cloudRunnerDebug,
             githubRepo: (input_1.default.githubRepo ?? (await git_repo_1.GitRepoReader.GetRemote())) || 'game-ci/unity-builder',
