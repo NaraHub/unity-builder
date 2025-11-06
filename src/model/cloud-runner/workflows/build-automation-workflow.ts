@@ -71,6 +71,11 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
           ? 'apt-get install -y curl tar tree npm git-lfs jq git > /dev/null || true\n      npm --version || true\n      npm i -g n > /dev/null || true\n      npm i -g semver > /dev/null || true\n      npm install --global yarn > /dev/null || true\n      n 20.8.0 || true\n      node --version || true'
           : '# skipping toolchain setup in local-docker or non-container provider'
       }
+      ${
+          isContainerized && CloudRunner.buildParameters.providerStrategy === 'aws'
+            ? 'apt-get install -y python3-pip  > /dev/null || true \n pip install awscli || true'
+            : ''
+        }
       ${setupHooks.filter((x) => x.hook.includes(`before`)).map((x) => x.commands) || ' '}
       ${
         CloudRunner.buildParameters.providerStrategy === 'local-docker'
@@ -95,7 +100,7 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
 CR_BRANCH="${CloudRunner.buildParameters.cloudRunnerBranch}"
 CR_REPO="${CloudRunnerFolders.unityBuilderRepoUrl}"
 DEST="${CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.builderPathAbsolute)}"
-if [ -n "$(git ls-remote --heads \"$CR_REPO\" \"$CR_BRANCH\" 2>/dev/null)" ]; then
+if [ -n "$(git ls-remote --heads \"$CR_R$BRAEPO\" \"$CR_BRANCH\" 2>/dev/null)" ]; then
   echo "Cloning builder from $CR_REPO $CR_BRANCH"
   git clone -q -b "$CR_BRANCH" "$CR_REPO" "$DEST"
 else
