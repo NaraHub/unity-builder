@@ -92,14 +92,14 @@ export class BuildAutomationWorkflow implements WorkflowInterface {
     const commands = `mkdir -p ${CloudRunnerFolders.ToLinuxFolder(
       CloudRunnerFolders.builderPathAbsolute,
     )}
-BRANCH="${CloudRunner.buildParameters.cloudRunnerBranch}"
-REPO="${CloudRunnerFolders.unityBuilderRepoUrl}"
+CR_BRANCH="${CloudRunner.buildParameters.cloudRunnerBranch}"
+CR_REPO="${CloudRunnerFolders.unityBuilderRepoUrl}"
 DEST="${CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.builderPathAbsolute)}"
-if [ -n "$(git ls-remote --heads \"$REPO\" \"$BRANCH\" 2>/dev/null)" ]; then
-  echo "Cloning builder from $REPO $BRANCH"
-  git clone -q -b "$BRANCH" "$REPO" "$DEST"
+if [ -n "$(git ls-remote --heads \"$CR_REPO\" \"$CR_BRANCH\" 2>/dev/null)" ]; then
+  echo "Cloning builder from $CR_REPO $CR_BRANCH"
+  git clone -q -b "$CR_BRANCH" "$CR_REPO" "$DEST"
 else
-  echo "Remote branch $BRANCH not found in $REPO; falling back to a known branch"
+  echo "Remote branch $CR_BRANCH not found in $CR_REPO; falling back to a known branch"
   git clone -q -b cloud-runner-develop "$REPO" "$DEST" \
     || git clone -q -b main "$REPO" "$DEST" \
     || git clone -q "$REPO" "$DEST"
