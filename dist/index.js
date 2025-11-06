@@ -5344,6 +5344,7 @@ class RemoteClient {
                 const libraryEntries = await node_fs_1.default.promises.readdir(libraryFolderHost).catch(() => []);
                 if (libraryEntries.length > 0) {
                     await caching_1.Caching.PushToCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(`${cloud_runner_folders_1.CloudRunnerFolders.cacheFolderForCacheKeyFull}/Library`), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute), `lib-${cloud_runner_1.default.buildParameters.buildGuid}`);
+                    await RemoteClient.runCustomHookFiles(`after-cache-push`);
                 }
                 else {
                     remote_client_logger_1.RemoteClientLogger.log(`Skipping Library cache push (folder is empty)`);
@@ -5418,6 +5419,7 @@ class RemoteClient {
         if (node_fs_1.default.existsSync(cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute)) {
             remote_client_logger_1.RemoteClientLogger.logWarning(`!Warning!: The Unity library was included in the git repository`);
         }
+        await RemoteClient.runCustomHookFiles(`before-cache-pull`);
         await caching_1.Caching.PullFromCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsCacheFolderFull), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsFolderAbsolute), `${lfsHashes.lfsGuidSum}`);
         await RemoteClient.sizeOfFolder('repo after lfs cache pull', cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
         await RemoteClient.pullLatestLFS();

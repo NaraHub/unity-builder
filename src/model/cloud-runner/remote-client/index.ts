@@ -78,6 +78,7 @@ export class RemoteClient {
             CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.libraryFolderAbsolute),
             `lib-${CloudRunner.buildParameters.buildGuid}`,
           );
+          await RemoteClient.runCustomHookFiles(`after-cache-push`);
         } else {
           RemoteClientLogger.log(`Skipping Library cache push (folder is empty)`);
         }
@@ -163,6 +164,7 @@ export class RemoteClient {
     if (fs.existsSync(CloudRunnerFolders.libraryFolderAbsolute)) {
       RemoteClientLogger.logWarning(`!Warning!: The Unity library was included in the git repository`);
     }
+    await RemoteClient.runCustomHookFiles(`before-cache-pull`);
     await Caching.PullFromCache(
       CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.lfsCacheFolderFull),
       CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.lfsFolderAbsolute),
