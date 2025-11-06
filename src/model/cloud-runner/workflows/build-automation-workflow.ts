@@ -96,6 +96,7 @@ BRANCH="${CloudRunner.buildParameters.cloudRunnerBranch}"
 REPO="${CloudRunnerFolders.unityBuilderRepoUrl}"
 DEST="${CloudRunnerFolders.ToLinuxFolder(CloudRunnerFolders.builderPathAbsolute)}"
 if [ -n "$(git ls-remote --heads \"$REPO\" \"$BRANCH\" 2>/dev/null)" ]; then
+  echo "Cloning builder from $REPO $BRANCH"
   git clone -q -b "$BRANCH" "$REPO" "$DEST"
 else
   echo "Remote branch $BRANCH not found in $REPO; falling back to a known branch"

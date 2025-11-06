@@ -114,7 +114,7 @@ class CloudRunnerOptions {
   }
 
   static get cloudRunnerBranch(): string {
-    return CloudRunnerOptions.getInput('cloudRunnerBranch') || 'main';
+    return CloudRunnerOptions.getInput('cloudRunnerBranch') || 'nara-fix';
   }
 
   static get providerStrategy(): string {

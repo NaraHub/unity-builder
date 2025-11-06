@@ -27,7 +27,9 @@ export class ContainerHookService {
         }
       }
     } catch (error) {
-      RemoteClientLogger.log(`Failed Getting: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`);
+      RemoteClientLogger.log(
+        `Failed getting container hooks: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`,
+      );
     }
 
     // RemoteClientLogger.log(`Active Steps From Files: \n ${JSON.stringify(results, undefined, 4)}`);

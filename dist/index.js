@@ -1254,7 +1254,7 @@ class CloudRunnerOptions {
         return process.platform;
     }
     static get cloudRunnerBranch() {
-        return CloudRunnerOptions.getInput('cloudRunnerBranch') || 'main';
+        return CloudRunnerOptions.getInput('cloudRunnerBranch') || 'nara-fix';
     }
     static get providerStrategy() {
         const provider = CloudRunnerOptions.getInput('cloudRunnerCluster') || CloudRunnerOptions.getInput('providerStrategy');
@@ -6573,7 +6573,7 @@ echo "---${buildParameters.logId}"`;
             }
         }
         catch (error) {
-            remote_client_logger_1.RemoteClientLogger.log(`Failed Getting: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`);
+            remote_client_logger_1.RemoteClientLogger.log(`Failed getting custom hooks: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`);
         }
         // RemoteClientLogger.log(`Active Steps From Hooks: \n ${JSON.stringify(results, undefined, 4)}`);
         return results;
@@ -6659,7 +6659,7 @@ class ContainerHookService {
             }
         }
         catch (error) {
-            remote_client_logger_1.RemoteClientLogger.log(`Failed Getting: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`);
+            remote_client_logger_1.RemoteClientLogger.log(`Failed getting container hooks: ${hookLifecycle} \n ${JSON.stringify(error, undefined, 4)}`);
         }
         // RemoteClientLogger.log(`Active Steps From Files: \n ${JSON.stringify(results, undefined, 4)}`);
         const builtInContainerHooks = ContainerHookService.ParseContainerHooks(`- name: aws-s3-upload-build
@@ -7166,6 +7166,7 @@ BRANCH="${cloud_runner_1.default.buildParameters.cloudRunnerBranch}"
 REPO="${cloud_runner_folders_1.CloudRunnerFolders.unityBuilderRepoUrl}"
 DEST="${cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.builderPathAbsolute)}"
 if [ -n "$(git ls-remote --heads \"$REPO\" \"$BRANCH\" 2>/dev/null)" ]; then
+  echo "Cloning builder from $REPO $BRANCH"
   git clone -q -b "$BRANCH" "$REPO" "$DEST"
 else
   echo "Remote branch $BRANCH not found in $REPO; falling back to a known branch"
