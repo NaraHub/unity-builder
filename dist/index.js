@@ -5278,22 +5278,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RemoteClient = void 0;
-const node_fs_1 = __importDefault(__nccwpck_require__(87561));
-const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
-const cloud_runner_folders_1 = __nccwpck_require__(77795);
-const caching_1 = __nccwpck_require__(32885);
-const lfs_hashing_1 = __nccwpck_require__(16785);
-const remote_client_logger_1 = __nccwpck_require__(59412);
-const node_path_1 = __importDefault(__nccwpck_require__(49411));
 const node_console_1 = __nccwpck_require__(40027);
-const cloud_runner_logger_1 = __importDefault(__nccwpck_require__(42864));
-const cli_functions_repository_1 = __nccwpck_require__(85301);
-const cloud_runner_system_1 = __nccwpck_require__(4197);
+const node_fs_1 = __importDefault(__nccwpck_require__(87561));
+const node_path_1 = __importDefault(__nccwpck_require__(49411));
 const yaml_1 = __importDefault(__nccwpck_require__(44083));
-const github_1 = __importDefault(__nccwpck_require__(83654));
 const build_parameters_1 = __importDefault(__nccwpck_require__(80787));
 const cli_1 = __nccwpck_require__(55651);
+const cli_functions_repository_1 = __nccwpck_require__(85301);
+const github_1 = __importDefault(__nccwpck_require__(83654));
+const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
+const cloud_runner_folders_1 = __nccwpck_require__(77795);
 const cloud_runner_options_1 = __importDefault(__nccwpck_require__(66965));
+const cloud_runner_logger_1 = __importDefault(__nccwpck_require__(42864));
+const cloud_runner_system_1 = __nccwpck_require__(4197);
+const lfs_hashing_1 = __nccwpck_require__(16785);
+const caching_1 = __nccwpck_require__(32885);
+const remote_client_logger_1 = __nccwpck_require__(59412);
 class RemoteClient {
     static async setupRemoteClient() {
         cloud_runner_logger_1.default.log(`bootstrap game ci cloud runner...`);
@@ -5304,16 +5304,16 @@ class RemoteClient {
         await RemoteClient.runCustomHookFiles(`before-build`);
     }
     static async remoteClientLogStream() {
-        const logFile = cli_1.Cli.options['logFile'];
+        const logFile = cli_1.Cli.options["logFile"];
         process.stdin.resume();
-        process.stdin.setEncoding('utf8');
-        let lingeringLine = '';
-        process.stdin.on('data', (chunk) => {
-            const lines = chunk.toString().split('\n');
+        process.stdin.setEncoding("utf8");
+        let lingeringLine = "";
+        process.stdin.on("data", (chunk) => {
+            const lines = chunk.toString().split("\n");
             lines[0] = lingeringLine + lines[0];
-            lingeringLine = lines.pop() || '';
+            lingeringLine = lines.pop() || "";
             for (const element of lines) {
-                if (cloud_runner_options_1.default.providerStrategy !== 'k8s') {
+                if (cloud_runner_options_1.default.providerStrategy !== "k8s") {
                     cloud_runner_logger_1.default.log(element);
                 }
                 else {
@@ -5322,8 +5322,8 @@ class RemoteClient {
                 }
             }
         });
-        process.stdin.on('end', () => {
-            if (cloud_runner_options_1.default.providerStrategy !== 'k8s') {
+        process.stdin.on("end", () => {
+            if (cloud_runner_options_1.default.providerStrategy !== "k8s") {
                 cloud_runner_logger_1.default.log(lingeringLine);
             }
             else {
@@ -5341,7 +5341,9 @@ class RemoteClient {
         try {
             const libraryFolderHost = cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute;
             if (node_fs_1.default.existsSync(libraryFolderHost)) {
-                const libraryEntries = await node_fs_1.default.promises.readdir(libraryFolderHost).catch(() => []);
+                const libraryEntries = await node_fs_1.default.promises
+                    .readdir(libraryFolderHost)
+                    .catch(() => []);
                 if (libraryEntries.length > 0) {
                     await caching_1.Caching.PushToCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(`${cloud_runner_folders_1.CloudRunnerFolders.cacheFolderForCacheKeyFull}/Library`), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute), `lib-${cloud_runner_1.default.buildParameters.buildGuid}`);
                     await RemoteClient.runCustomHookFiles(`after-cache-push`);
@@ -5357,11 +5359,14 @@ class RemoteClient {
         catch (error) {
             remote_client_logger_1.RemoteClientLogger.logWarning(`Library cache push skipped with error: ${error.message}`);
         }
+        await RemoteClient.runCustomHookFiles(`after-build`);
         // Guard: only push Build cache if the folder exists and has contents
         try {
             const buildFolderHost = cloud_runner_folders_1.CloudRunnerFolders.projectBuildFolderAbsolute;
             if (node_fs_1.default.existsSync(buildFolderHost)) {
-                const buildEntries = await node_fs_1.default.promises.readdir(buildFolderHost).catch(() => []);
+                const buildEntries = await node_fs_1.default.promises
+                    .readdir(buildFolderHost)
+                    .catch(() => []);
                 if (buildEntries.length > 0) {
                     await caching_1.Caching.PushToCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(`${cloud_runner_folders_1.CloudRunnerFolders.cacheFolderForCacheKeyFull}/build`), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.projectBuildFolderAbsolute), `build-${cloud_runner_1.default.buildParameters.buildGuid}`);
                 }
@@ -5378,14 +5383,14 @@ class RemoteClient {
         }
         if (!build_parameters_1.default.shouldUseRetainedWorkspaceMode(cloud_runner_1.default.buildParameters)) {
             const uniqueJobFolderLinux = cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute);
-            if (node_fs_1.default.existsSync(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute) || node_fs_1.default.existsSync(uniqueJobFolderLinux)) {
+            if (node_fs_1.default.existsSync(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute) ||
+                node_fs_1.default.existsSync(uniqueJobFolderLinux)) {
                 await cloud_runner_system_1.CloudRunnerSystem.Run(`rm -r ${uniqueJobFolderLinux} || true`);
             }
             else {
                 remote_client_logger_1.RemoteClientLogger.log(`Skipping cleanup; unique job folder missing`);
             }
         }
-        await RemoteClient.runCustomHookFiles(`after-build`);
         // WIP - need to give the pod permissions to create config map
         await remote_client_logger_1.RemoteClientLogger.handleLogManagementPostJob();
         // Ensure success marker is present in logs for tests
@@ -5414,19 +5419,19 @@ class RemoteClient {
         await cloud_runner_system_1.CloudRunnerSystem.Run(`mkdir -p ${cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute)}`);
         await cloud_runner_system_1.CloudRunnerSystem.Run(`mkdir -p ${cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.cacheFolderForCacheKeyFull)}`);
         await RemoteClient.cloneRepoWithoutLFSFiles();
-        await RemoteClient.sizeOfFolder('repo before lfs cache pull', cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute));
+        await RemoteClient.sizeOfFolder("repo before lfs cache pull", cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute));
         const lfsHashes = await lfs_hashing_1.LfsHashing.createLFSHashFiles();
         if (node_fs_1.default.existsSync(cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute)) {
             remote_client_logger_1.RemoteClientLogger.logWarning(`!Warning!: The Unity library was included in the git repository`);
         }
         await RemoteClient.runCustomHookFiles(`before-cache-pull`);
         await caching_1.Caching.PullFromCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsCacheFolderFull), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsFolderAbsolute), `${lfsHashes.lfsGuidSum}`);
-        await RemoteClient.sizeOfFolder('repo after lfs cache pull', cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
+        await RemoteClient.sizeOfFolder("repo after lfs cache pull", cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
         await RemoteClient.pullLatestLFS();
-        await RemoteClient.sizeOfFolder('repo before lfs git pull', cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
+        await RemoteClient.sizeOfFolder("repo before lfs git pull", cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
         await caching_1.Caching.PushToCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsCacheFolderFull), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.lfsFolderAbsolute), `${lfsHashes.lfsGuidSum}`);
         await caching_1.Caching.PullFromCache(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.libraryCacheFolderFull), cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.libraryFolderAbsolute));
-        await RemoteClient.sizeOfFolder('repo after library cache pull', cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
+        await RemoteClient.sizeOfFolder("repo after library cache pull", cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
         await caching_1.Caching.handleCachePurging();
     }
     static async sizeOfFolder(message, folder) {
@@ -5462,11 +5467,11 @@ class RemoteClient {
         }
         process.chdir(cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute);
         await cloud_runner_system_1.CloudRunnerSystem.Run(`git lfs install`);
-        (0, node_console_1.assert)(node_fs_1.default.existsSync(`.git`), 'git folder exists');
+        (0, node_console_1.assert)(node_fs_1.default.existsSync(`.git`), "git folder exists");
         remote_client_logger_1.RemoteClientLogger.log(`${cloud_runner_1.default.buildParameters.branch}`);
         // Ensure refs exist (tags and PR refs)
         await cloud_runner_system_1.CloudRunnerSystem.Run(`git fetch --all --tags || true`);
-        if ((cloud_runner_1.default.buildParameters.branch || '').startsWith('pull/')) {
+        if ((cloud_runner_1.default.buildParameters.branch || "").startsWith("pull/")) {
             await cloud_runner_system_1.CloudRunnerSystem.Run(`git fetch origin +refs/pull/*:refs/remotes/origin/pull/* || true`);
         }
         const targetSha = cloud_runner_1.default.buildParameters.gitSha;
@@ -5486,7 +5491,7 @@ class RemoteClient {
                         await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout ${targetBranch}`);
                     }
                     catch (_error3) {
-                        if ((targetBranch || '').startsWith('pull/')) {
+                        if ((targetBranch || "").startsWith("pull/")) {
                             await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout origin/${targetBranch}`);
                         }
                         else {
@@ -5501,7 +5506,7 @@ class RemoteClient {
                 await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout ${targetBranch}`);
             }
             catch (_error) {
-                if ((targetBranch || '').startsWith('pull/')) {
+                if ((targetBranch || "").startsWith("pull/")) {
                     await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout origin/${targetBranch}`);
                 }
                 else {
@@ -5510,7 +5515,7 @@ class RemoteClient {
             }
             remote_client_logger_1.RemoteClientLogger.log(`buildParameter Git Sha is empty`);
         }
-        (0, node_console_1.assert)(node_fs_1.default.existsSync(node_path_1.default.join(`.git`, `lfs`)), 'LFS folder should not exist before caching');
+        (0, node_console_1.assert)(node_fs_1.default.existsSync(node_path_1.default.join(`.git`, `lfs`)), "LFS folder should not exist before caching");
         remote_client_logger_1.RemoteClientLogger.log(`Checked out ${cloud_runner_1.default.buildParameters.branch}`);
     }
     static async replaceLargePackageReferencesWithSharedReferences() {
@@ -5518,8 +5523,8 @@ class RemoteClient {
         github_1.default.updateGitHubCheck(`Use Shared Pkgs ${cloud_runner_1.default.buildParameters.useLargePackages}`, ``);
         if (cloud_runner_1.default.buildParameters.useLargePackages) {
             const filePath = node_path_1.default.join(cloud_runner_folders_1.CloudRunnerFolders.projectPathAbsolute, `Packages/manifest.json`);
-            let manifest = node_fs_1.default.readFileSync(filePath, 'utf8');
-            manifest = manifest.replace(/LargeContent/g, '../../../LargeContent');
+            let manifest = node_fs_1.default.readFileSync(filePath, "utf8");
+            manifest = manifest.replace(/LargeContent/g, "../../../LargeContent");
             node_fs_1.default.writeFileSync(filePath, manifest);
             cloud_runner_logger_1.default.log(`Package Manifest \n ${manifest}`);
             github_1.default.updateGitHubCheck(`Package Manifest \n ${manifest}`, ``);
@@ -5593,7 +5598,7 @@ class RemoteClient {
             cloud_runner_logger_1.default.log(`Retained Workspace Already Exists!`);
             process.chdir(cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.repoPathAbsolute));
             await cloud_runner_system_1.CloudRunnerSystem.Run(`git fetch --all --tags || true`);
-            if ((cloud_runner_1.default.buildParameters.branch || '').startsWith('pull/')) {
+            if ((cloud_runner_1.default.buildParameters.branch || "").startsWith("pull/")) {
                 await cloud_runner_system_1.CloudRunnerSystem.Run(`git fetch origin +refs/pull/*:refs/remotes/origin/pull/* || true`);
             }
             await cloud_runner_system_1.CloudRunnerSystem.Run(`git lfs pull`);
@@ -5610,7 +5615,7 @@ class RemoteClient {
                     await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout ${branch}`);
                 }
                 catch (_error2) {
-                    if ((branch || '').startsWith('pull/')) {
+                    if ((branch || "").startsWith("pull/")) {
                         await cloud_runner_system_1.CloudRunnerSystem.Run(`git checkout origin/${branch}`);
                     }
                     else {
@@ -5627,7 +5632,7 @@ __decorate([
     (0, cli_functions_repository_1.CliFunction)(`remote-cli-pre-build`, `sets up a repository, usually before a game-ci build`)
 ], RemoteClient, "setupRemoteClient", null);
 __decorate([
-    (0, cli_functions_repository_1.CliFunction)('remote-cli-log-stream', `log stream from standard input`)
+    (0, cli_functions_repository_1.CliFunction)("remote-cli-log-stream", `log stream from standard input`)
 ], RemoteClient, "remoteClientLogStream", null);
 __decorate([
     (0, cli_functions_repository_1.CliFunction)(`remote-cli-post-build`, `runs a cloud runner build`)
