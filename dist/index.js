@@ -5359,7 +5359,6 @@ class RemoteClient {
         catch (error) {
             remote_client_logger_1.RemoteClientLogger.logWarning(`Library cache push skipped with error: ${error.message}`);
         }
-        await RemoteClient.runCustomHookFiles(`after-build`);
         // Guard: only push Build cache if the folder exists and has contents
         try {
             const buildFolderHost = cloud_runner_folders_1.CloudRunnerFolders.projectBuildFolderAbsolute;
@@ -5381,6 +5380,7 @@ class RemoteClient {
         catch (error) {
             remote_client_logger_1.RemoteClientLogger.logWarning(`Build cache push skipped with error: ${error.message}`);
         }
+        await RemoteClient.runCustomHookFiles(`after-build`);
         if (!build_parameters_1.default.shouldUseRetainedWorkspaceMode(cloud_runner_1.default.buildParameters)) {
             const uniqueJobFolderLinux = cloud_runner_folders_1.CloudRunnerFolders.ToLinuxFolder(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute);
             if (node_fs_1.default.existsSync(cloud_runner_folders_1.CloudRunnerFolders.uniqueCloudRunnerJobFolderAbsolute) ||

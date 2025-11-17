@@ -102,8 +102,6 @@ export class RemoteClient {
 			);
 		}
 
-		await RemoteClient.runCustomHookFiles(`after-build`);
-
 		// Guard: only push Build cache if the folder exists and has contents
 		try {
 			const buildFolderHost = CloudRunnerFolders.projectBuildFolderAbsolute;
@@ -132,6 +130,8 @@ export class RemoteClient {
 				`Build cache push skipped with error: ${error.message}`,
 			);
 		}
+
+		await RemoteClient.runCustomHookFiles(`after-build`);
 
 		if (
 			!BuildParameters.shouldUseRetainedWorkspaceMode(
