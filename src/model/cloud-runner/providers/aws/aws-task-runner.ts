@@ -70,8 +70,11 @@ class AWSTaskRunner {
     }
 
     const task = await AwsClientFactory.getECS().send(new RunTaskCommand(runParameters as any));
+    if (!task.tasks || task.tasks.length === 0) {
+          CloudRunnerLogger.log(`RunTaskCommand response: ${JSON.stringify(task, undefined, 4)}`);
+          throw new Error('No tasks were created. Check the RunTaskCommand response above.');
+    }
     const taskArn = task.tasks?.[0].taskArn || '';
-    CloudRunnerLogger.log(`RunTaskCommand response: ${JSON.stringify(task, undefined, 4)}`);
     CloudRunnerLogger.log('Cloud runner job is starting');
     await AWSTaskRunner.waitUntilTaskRunning(taskArn, cluster);
     CloudRunnerLogger.log(
