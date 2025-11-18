@@ -2095,6 +2095,7 @@ class AWSTaskRunner {
         }
         const task = await aws_client_factory_1.AwsClientFactory.getECS().send(new client_ecs_1.RunTaskCommand(runParameters));
         const taskArn = task.tasks?.[0].taskArn || '';
+        cloud_runner_logger_1.default.log(`RunTaskCommand response: ${JSON.stringify(task, undefined, 4)}`);
         cloud_runner_logger_1.default.log('Cloud runner job is starting');
         await AWSTaskRunner.waitUntilTaskRunning(taskArn, cluster);
         cloud_runner_logger_1.default.log(`Cloud runner job status is running ${(await AWSTaskRunner.describeTasks(cluster, taskArn))?.lastStatus} Async:${cloud_runner_options_1.default.asyncCloudRunner}`);
