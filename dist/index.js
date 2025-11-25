@@ -232,24 +232,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(42186));
 const nanoid_1 = __nccwpck_require__(17592);
 const android_versioning_1 = __importDefault(__nccwpck_require__(43059));
+const cli_1 = __nccwpck_require__(55651);
+const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
 const cloud_runner_constants_1 = __importDefault(__nccwpck_require__(10694));
 const cloud_runner_guid_1 = __importDefault(__nccwpck_require__(32285));
+const cloud_runner_options_1 = __importDefault(__nccwpck_require__(66965));
+const github_1 = __importDefault(__nccwpck_require__(83654));
 const input_1 = __importDefault(__nccwpck_require__(91933));
+const git_repo_1 = __nccwpck_require__(24271);
+const github_cli_1 = __nccwpck_require__(44990);
 const platform_1 = __importDefault(__nccwpck_require__(9707));
 const unity_versioning_1 = __importDefault(__nccwpck_require__(17146));
 const versioning_1 = __importDefault(__nccwpck_require__(88729));
-const git_repo_1 = __nccwpck_require__(24271);
-const github_cli_1 = __nccwpck_require__(44990);
-const cli_1 = __nccwpck_require__(55651);
-const github_1 = __importDefault(__nccwpck_require__(83654));
-const cloud_runner_options_1 = __importDefault(__nccwpck_require__(66965));
-const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
-const core = __importStar(__nccwpck_require__(42186));
 class BuildParameters {
     static shouldUseRetainedWorkspaceMode(buildParameters) {
-        return buildParameters.maxRetainedWorkspaces > 0 && cloud_runner_1.default.lockedWorkspace !== ``;
+        return (buildParameters.maxRetainedWorkspaces > 0 &&
+            cloud_runner_1.default.lockedWorkspace !== ``);
     }
     static async create() {
         const buildFile = this.parseBuildFile(input_1.default.buildName, input_1.default.targetPlatform, input_1.default.androidExportType);
@@ -260,16 +261,16 @@ class BuildParameters {
         const androidSymbolExportType = input_1.default.androidSymbolType;
         if (platform_1.default.isAndroid(input_1.default.targetPlatform)) {
             switch (androidSymbolExportType) {
-                case 'none':
-                case 'public':
-                case 'debugging':
+                case "none":
+                case "public":
+                case "debugging":
                     break;
                 default:
                     throw new Error(`Invalid androidSymbolType: ${input_1.default.androidSymbolType}. Must be one of: none, public, debugging`);
             }
         }
-        let unitySerial = '';
-        if (input_1.default.unityLicensingServer === '') {
+        let unitySerial = "";
+        if (input_1.default.unityLicensingServer === "") {
             if (!input_1.default.unitySerial && github_1.default.githubInputEnabled) {
                 // No serial was present, so it is a personal license that we need to convert
                 if (!input_1.default.unityLicense) {
@@ -339,10 +340,13 @@ class BuildParameters {
             preBuildContainerHooks: cloud_runner_options_1.default.preBuildContainerHooks,
             customJob: cloud_runner_options_1.default.customJob,
             runNumber: input_1.default.runNumber,
-            branch: input_1.default.branch.replace('/head', '') || 'non-branch',
-            cloudRunnerBranch: cloud_runner_options_1.default.cloudRunnerBranch.split('/').reverse()[0],
+            branch: input_1.default.branch.replace("/head", "") || "non-branch",
+            cloudRunnerBranch: cloud_runner_options_1.default.cloudRunnerBranch
+                .split("/")
+                .reverse()[0],
             cloudRunnerDebug: cloud_runner_options_1.default.cloudRunnerDebug,
-            githubRepo: (input_1.default.githubRepo ?? (await git_repo_1.GitRepoReader.GetRemote())) || 'game-ci/unity-builder',
+            githubRepo: (input_1.default.githubRepo ?? (await git_repo_1.GitRepoReader.GetRemote())) ||
+                "game-ci/unity-builder",
             isCliMode: cli_1.Cli.isCliMode,
             awsStackName: cloud_runner_options_1.default.awsStackName,
             awsEndpoint: cloud_runner_options_1.default.awsEndpoint,
@@ -403,7 +407,9 @@ class BuildParameters {
         }
         const endIndex = license.indexOf(endKey, startIndex);
         // Slice off the first 4 characters as they are garbage values
-        return Buffer.from(license.slice(startIndex, endIndex), 'base64').toString('binary').slice(4);
+        return Buffer.from(license.slice(startIndex, endIndex), "base64")
+            .toString("binary")
+            .slice(4);
     }
 }
 exports["default"] = BuildParameters;
@@ -1158,10 +1164,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const cli_1 = __nccwpck_require__(55651);
-const cloud_runner_query_override_1 = __importDefault(__nccwpck_require__(52207));
-const github_1 = __importDefault(__nccwpck_require__(83654));
 const core = __importStar(__nccwpck_require__(42186));
+const cli_1 = __nccwpck_require__(55651);
+const github_1 = __importDefault(__nccwpck_require__(83654));
+const cloud_runner_query_override_1 = __importDefault(__nccwpck_require__(52207));
 class CloudRunnerOptions {
     // ### ### ###
     // Input Handling
@@ -1169,7 +1175,7 @@ class CloudRunnerOptions {
     static getInput(query) {
         if (github_1.default.githubInputEnabled) {
             const coreInput = core.getInput(query);
-            if (coreInput && coreInput !== '') {
+            if (coreInput && coreInput !== "") {
                 return coreInput;
             }
         }
@@ -1184,7 +1190,8 @@ class CloudRunnerOptions {
         if (process.env[query] !== undefined) {
             return process.env[query];
         }
-        if (alternativeQuery !== query && process.env[alternativeQuery] !== undefined) {
+        if (alternativeQuery !== query &&
+            process.env[alternativeQuery] !== undefined) {
             return process.env[alternativeQuery];
         }
     }
@@ -1193,181 +1200,196 @@ class CloudRunnerOptions {
             return input;
         }
         return input
-            .replace(/([A-Z])/g, ' $1')
+            .replace(/([A-Z])/g, " $1")
             .trim()
             .toUpperCase()
-            .replace(/ /g, '_');
+            .replace(/ /g, "_");
     }
     // ### ### ###
     // Provider parameters
     // ### ### ###
     static get region() {
-        return CloudRunnerOptions.getInput('region') || 'eu-west-2';
+        return CloudRunnerOptions.getInput("region") || "eu-west-2";
     }
     // ### ### ###
     // GitHub  parameters
     // ### ### ###
     static get githubChecks() {
-        const value = CloudRunnerOptions.getInput('githubChecks');
+        const value = CloudRunnerOptions.getInput("githubChecks");
         return value === `true` || false;
     }
     static get githubCheckId() {
-        return CloudRunnerOptions.getInput('githubCheckId') || ``;
+        return CloudRunnerOptions.getInput("githubCheckId") || ``;
     }
     static get githubOwner() {
-        return CloudRunnerOptions.getInput('githubOwner') || CloudRunnerOptions.githubRepo?.split(`/`)[0] || '';
+        return (CloudRunnerOptions.getInput("githubOwner") ||
+            CloudRunnerOptions.githubRepo?.split(`/`)[0] ||
+            "");
     }
     static get githubRepoName() {
-        return CloudRunnerOptions.getInput('githubRepoName') || CloudRunnerOptions.githubRepo?.split(`/`)[1] || '';
+        return (CloudRunnerOptions.getInput("githubRepoName") ||
+            CloudRunnerOptions.githubRepo?.split(`/`)[1] ||
+            "");
     }
     static get finalHooks() {
-        return CloudRunnerOptions.getInput('finalHooks')?.split(',') || [];
+        return CloudRunnerOptions.getInput("finalHooks")?.split(",") || [];
     }
     // ### ### ###
     // Git syncronization parameters
     // ### ### ###
     static get githubRepo() {
-        return CloudRunnerOptions.getInput('GITHUB_REPOSITORY') || CloudRunnerOptions.getInput('GITHUB_REPO') || undefined;
+        return (CloudRunnerOptions.getInput("GITHUB_REPOSITORY") ||
+            CloudRunnerOptions.getInput("GITHUB_REPO") ||
+            undefined);
     }
     static get branch() {
         if (CloudRunnerOptions.getInput(`GITHUB_REF`)) {
-            return (CloudRunnerOptions.getInput(`GITHUB_REF`)?.replace('refs/', '').replace(`head/`, '').replace(`heads/`, '') || ``);
+            return (CloudRunnerOptions.getInput(`GITHUB_REF`)
+                ?.replace("refs/", "")
+                .replace(`head/`, "")
+                .replace(`heads/`, "") || ``);
         }
-        else if (CloudRunnerOptions.getInput('branch')) {
-            return CloudRunnerOptions.getInput('branch') || ``;
+        else if (CloudRunnerOptions.getInput("branch")) {
+            return CloudRunnerOptions.getInput("branch") || ``;
         }
         else {
-            return '';
+            return "";
         }
     }
     // ### ### ###
     // Cloud Runner parameters
     // ### ### ###
     static get buildPlatform() {
-        const input = CloudRunnerOptions.getInput('buildPlatform');
-        if (input && input !== '') {
+        const input = CloudRunnerOptions.getInput("buildPlatform");
+        if (input && input !== "") {
             return input;
         }
-        if (CloudRunnerOptions.providerStrategy !== 'local') {
-            return 'linux';
+        if (CloudRunnerOptions.providerStrategy !== "local") {
+            return "linux";
         }
         return process.platform;
     }
     static get cloudRunnerBranch() {
-        return CloudRunnerOptions.getInput('cloudRunnerBranch') || 'nara-fix';
+        return CloudRunnerOptions.getInput("cloudRunnerBranch") || "nara-fix";
     }
     static get providerStrategy() {
-        const provider = CloudRunnerOptions.getInput('cloudRunnerCluster') || CloudRunnerOptions.getInput('providerStrategy');
+        const provider = CloudRunnerOptions.getInput("cloudRunnerCluster") ||
+            CloudRunnerOptions.getInput("providerStrategy");
         if (cli_1.Cli.isCliMode) {
-            return provider || 'aws';
+            return provider || "aws";
         }
-        return provider || 'local';
+        return provider || "local";
     }
     static get containerCpu() {
-        return CloudRunnerOptions.getInput('containerCpu') || `1024`;
+        return CloudRunnerOptions.getInput("containerCpu") || `1024`;
     }
     static get containerMemory() {
-        return CloudRunnerOptions.getInput('containerMemory') || `3072`;
+        return CloudRunnerOptions.getInput("containerMemory") || `3072`;
     }
     static get ephemeralStorage() {
-        return CloudRunnerOptions.getInput('ephemeralStorageSize') || `100`;
+        return CloudRunnerOptions.getInput("ephemeralStorageSize") || `100`;
     }
     static get useSpotInstances() {
-        return CloudRunnerOptions.getInput('useSpotInstances') || `false`;
+        return CloudRunnerOptions.getInput("useSpotInstances") === "true";
     }
     static get customJob() {
-        return CloudRunnerOptions.getInput('customJob') || '';
+        return CloudRunnerOptions.getInput("customJob") || "";
     }
     // ### ### ###
     // Custom commands from files parameters
     // ### ### ###
     static get containerHookFiles() {
-        return CloudRunnerOptions.getInput('containerHookFiles')?.split(`,`) || [];
+        return CloudRunnerOptions.getInput("containerHookFiles")?.split(`,`) || [];
     }
     static get commandHookFiles() {
-        return CloudRunnerOptions.getInput('commandHookFiles')?.split(`,`) || [];
+        return CloudRunnerOptions.getInput("commandHookFiles")?.split(`,`) || [];
     }
     // ### ### ###
     // Custom commands from yaml parameters
     // ### ### ###
     static get commandHooks() {
-        return CloudRunnerOptions.getInput('commandHooks') || '';
+        return CloudRunnerOptions.getInput("commandHooks") || "";
     }
     static get postBuildContainerHooks() {
-        return CloudRunnerOptions.getInput('postBuildContainerHooks') || '';
+        return CloudRunnerOptions.getInput("postBuildContainerHooks") || "";
     }
     static get preBuildContainerHooks() {
-        return CloudRunnerOptions.getInput('preBuildContainerHooks') || '';
+        return CloudRunnerOptions.getInput("preBuildContainerHooks") || "";
     }
     // ### ### ###
     // Input override handling
     // ### ### ###
     static get pullInputList() {
-        return CloudRunnerOptions.getInput('pullInputList')?.split(`,`) || [];
+        return CloudRunnerOptions.getInput("pullInputList")?.split(`,`) || [];
     }
     static get inputPullCommand() {
-        const value = CloudRunnerOptions.getInput('inputPullCommand');
-        if (value === 'gcp-secret-manager') {
+        const value = CloudRunnerOptions.getInput("inputPullCommand");
+        if (value === "gcp-secret-manager") {
             return 'gcloud secrets versions access 1 --secret="{0}"';
         }
-        else if (value === 'aws-secret-manager') {
-            return 'aws secretsmanager get-secret-value --secret-id {0}';
+        else if (value === "aws-secret-manager") {
+            return "aws secretsmanager get-secret-value --secret-id {0}";
         }
-        return value || '';
+        return value || "";
     }
     // ### ### ###
     // Aws
     // ### ### ###
     static get awsStackName() {
-        return CloudRunnerOptions.getInput('awsStackName') || 'game-ci';
+        return CloudRunnerOptions.getInput("awsStackName") || "game-ci";
     }
     static get awsEndpoint() {
-        return CloudRunnerOptions.getInput('awsEndpoint');
+        return CloudRunnerOptions.getInput("awsEndpoint");
     }
     static get awsCloudFormationEndpoint() {
-        return CloudRunnerOptions.getInput('awsCloudFormationEndpoint') || CloudRunnerOptions.awsEndpoint;
+        return (CloudRunnerOptions.getInput("awsCloudFormationEndpoint") ||
+            CloudRunnerOptions.awsEndpoint);
     }
     static get awsEcsEndpoint() {
-        return CloudRunnerOptions.getInput('awsEcsEndpoint') || CloudRunnerOptions.awsEndpoint;
+        return (CloudRunnerOptions.getInput("awsEcsEndpoint") ||
+            CloudRunnerOptions.awsEndpoint);
     }
     static get awsKinesisEndpoint() {
-        return CloudRunnerOptions.getInput('awsKinesisEndpoint') || CloudRunnerOptions.awsEndpoint;
+        return (CloudRunnerOptions.getInput("awsKinesisEndpoint") ||
+            CloudRunnerOptions.awsEndpoint);
     }
     static get awsCloudWatchLogsEndpoint() {
-        return CloudRunnerOptions.getInput('awsCloudWatchLogsEndpoint') || CloudRunnerOptions.awsEndpoint;
+        return (CloudRunnerOptions.getInput("awsCloudWatchLogsEndpoint") ||
+            CloudRunnerOptions.awsEndpoint);
     }
     static get awsS3Endpoint() {
-        return CloudRunnerOptions.getInput('awsS3Endpoint') || CloudRunnerOptions.awsEndpoint;
+        return (CloudRunnerOptions.getInput("awsS3Endpoint") ||
+            CloudRunnerOptions.awsEndpoint);
     }
     // ### ### ###
     // Storage
     // ### ### ###
     static get storageProvider() {
-        return CloudRunnerOptions.getInput('storageProvider') || 's3';
+        return CloudRunnerOptions.getInput("storageProvider") || "s3";
     }
     static get rcloneRemote() {
-        return CloudRunnerOptions.getInput('rcloneRemote') || '';
+        return CloudRunnerOptions.getInput("rcloneRemote") || "";
     }
     // ### ### ###
     // K8s
     // ### ### ###
     static get kubeConfig() {
-        return CloudRunnerOptions.getInput('kubeConfig') || '';
+        return CloudRunnerOptions.getInput("kubeConfig") || "";
     }
     static get kubeVolume() {
-        return CloudRunnerOptions.getInput('kubeVolume') || '';
+        return CloudRunnerOptions.getInput("kubeVolume") || "";
     }
     static get kubeVolumeSize() {
-        return CloudRunnerOptions.getInput('kubeVolumeSize') || '25Gi';
+        return CloudRunnerOptions.getInput("kubeVolumeSize") || "25Gi";
     }
     static get kubeStorageClass() {
-        return CloudRunnerOptions.getInput('kubeStorageClass') || '';
+        return CloudRunnerOptions.getInput("kubeStorageClass") || "";
     }
     // ### ### ###
     // Caching
     // ### ### ###
     static get cacheKey() {
-        return CloudRunnerOptions.getInput('cacheKey') || CloudRunnerOptions.branch;
+        return CloudRunnerOptions.getInput("cacheKey") || CloudRunnerOptions.branch;
     }
     // ### ### ###
     // Utility Parameters
@@ -1386,7 +1408,7 @@ class CloudRunnerOptions {
         return CloudRunnerOptions.getInput(`skipCache`) === `true`;
     }
     static get asyncCloudRunner() {
-        return CloudRunnerOptions.getInput('asyncCloudRunner') === 'true';
+        return CloudRunnerOptions.getInput("asyncCloudRunner") === "true";
     }
     static get useLargePackages() {
         return CloudRunnerOptions.getInput(`useLargePackages`) === `true`;
@@ -1398,7 +1420,7 @@ class CloudRunnerOptions {
         return CloudRunnerOptions.getInput(`useCompressionStrategy`) === `true`;
     }
     static get useCleanupCron() {
-        return (CloudRunnerOptions.getInput(`useCleanupCron`) || 'true') === 'true';
+        return (CloudRunnerOptions.getInput(`useCleanupCron`) || "true") === "true";
     }
     // ### ### ###
     // Retained Workspace
@@ -2038,53 +2060,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const zlib = __importStar(__nccwpck_require__(65628));
+const core = __importStar(__nccwpck_require__(42186));
 const client_ecs_1 = __nccwpck_require__(18209);
 const client_kinesis_1 = __nccwpck_require__(25474);
-const core = __importStar(__nccwpck_require__(42186));
-const zlib = __importStar(__nccwpck_require__(65628));
-const cloud_runner_logger_1 = __importDefault(__nccwpck_require__(42864));
 const __1 = __nccwpck_require__(41359);
-const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
-const command_hook_service_1 = __nccwpck_require__(96159);
-const follow_log_stream_service_1 = __nccwpck_require__(40266);
-const cloud_runner_options_1 = __importDefault(__nccwpck_require__(66965));
 const github_1 = __importDefault(__nccwpck_require__(83654));
+const cloud_runner_1 = __importDefault(__nccwpck_require__(79144));
+const cloud_runner_options_1 = __importDefault(__nccwpck_require__(66965));
+const cloud_runner_logger_1 = __importDefault(__nccwpck_require__(42864));
+const follow_log_stream_service_1 = __nccwpck_require__(40266);
+const command_hook_service_1 = __nccwpck_require__(96159);
 const aws_client_factory_1 = __nccwpck_require__(30161);
 class AWSTaskRunner {
     static async runTask(taskDef, environment, commands) {
-        const cluster = taskDef.baseResources?.find((x) => x.LogicalResourceId === 'ECSCluster')?.PhysicalResourceId || '';
-        const taskDefinition = taskDef.taskDefResources?.find((x) => x.LogicalResourceId === 'TaskDefinition')?.PhysicalResourceId || '';
-        const SubnetOne = taskDef.baseResources?.find((x) => x.LogicalResourceId === 'PublicSubnetOne')?.PhysicalResourceId || '';
-        const SubnetTwo = taskDef.baseResources?.find((x) => x.LogicalResourceId === 'PublicSubnetTwo')?.PhysicalResourceId || '';
-        const ContainerSecurityGroup = taskDef.baseResources?.find((x) => x.LogicalResourceId === 'ContainerSecurityGroup')?.PhysicalResourceId || '';
-        const streamName = taskDef.taskDefResources?.find((x) => x.LogicalResourceId === 'KinesisStream')?.PhysicalResourceId || '';
+        const cluster = taskDef.baseResources?.find((x) => x.LogicalResourceId === "ECSCluster")
+            ?.PhysicalResourceId || "";
+        const taskDefinition = taskDef.taskDefResources?.find((x) => x.LogicalResourceId === "TaskDefinition")?.PhysicalResourceId || "";
+        const SubnetOne = taskDef.baseResources?.find((x) => x.LogicalResourceId === "PublicSubnetOne")?.PhysicalResourceId || "";
+        const SubnetTwo = taskDef.baseResources?.find((x) => x.LogicalResourceId === "PublicSubnetTwo")?.PhysicalResourceId || "";
+        const ContainerSecurityGroup = taskDef.baseResources?.find((x) => x.LogicalResourceId === "ContainerSecurityGroup")?.PhysicalResourceId || "";
+        const streamName = taskDef.taskDefResources?.find((x) => x.LogicalResourceId === "KinesisStream")?.PhysicalResourceId || "";
         const runParameters = {
             cluster,
             taskDefinition,
-            platformVersion: '1.4.0',
+            platformVersion: "1.4.0",
             overrides: {
                 containerOverrides: [
                     {
                         name: taskDef.taskDefStackName,
                         environment,
-                        command: ['-c', command_hook_service_1.CommandHookService.ApplyHooksToCommands(commands, cloud_runner_1.default.buildParameters)],
+                        command: [
+                            "-c",
+                            command_hook_service_1.CommandHookService.ApplyHooksToCommands(commands, cloud_runner_1.default.buildParameters),
+                        ],
                     },
                 ],
             },
-            launchType: cloud_runner_1.default.buildParameters.useSpotInstances ? undefined : 'FARGATE',
             capacityProviderStrategy: cloud_runner_1.default.buildParameters.useSpotInstances
                 ? [
-                    {
-                        capacityProvider: 'FARGATE_SPOT',
-                        weight: 1,
-                        base: 0,
-                    },
+                    { capacityProvider: "FARGATE_SPOT", weight: 2, base: 0 },
+                    { capacityProvider: "FARGATE", weight: 1, base: 0 },
                 ]
-                : undefined,
+                : [{ capacityProvider: "FARGATE", weight: 1, base: 0 }],
             networkConfiguration: {
                 awsvpcConfiguration: {
                     subnets: [SubnetOne, SubnetTwo],
-                    assignPublicIp: 'ENABLED',
+                    assignPublicIp: "ENABLED",
                     securityGroups: [ContainerSecurityGroup],
                 },
             },
@@ -2096,15 +2118,15 @@ class AWSTaskRunner {
         const task = await aws_client_factory_1.AwsClientFactory.getECS().send(new client_ecs_1.RunTaskCommand(runParameters));
         if (!task.tasks || task.tasks.length === 0) {
             cloud_runner_logger_1.default.log(`RunTaskCommand response: ${JSON.stringify(task, undefined, 4)}`);
-            throw new Error('No tasks were created. Check the RunTaskCommand response above.');
+            throw new Error("No tasks were created. Check the RunTaskCommand response above.");
         }
-        const taskArn = task.tasks?.[0].taskArn || '';
-        cloud_runner_logger_1.default.log('Cloud runner job is starting');
+        const taskArn = task.tasks?.[0].taskArn || "";
+        cloud_runner_logger_1.default.log("Cloud runner job is starting");
         await AWSTaskRunner.waitUntilTaskRunning(taskArn, cluster);
         cloud_runner_logger_1.default.log(`Cloud runner job status is running ${(await AWSTaskRunner.describeTasks(cluster, taskArn))?.lastStatus} Async:${cloud_runner_options_1.default.asyncCloudRunner}`);
         if (cloud_runner_options_1.default.asyncCloudRunner) {
             const shouldCleanup = false;
-            const output = '';
+            const output = "";
             cloud_runner_logger_1.default.log(`Watch Cloud Runner To End: false`);
             return { output, shouldCleanup };
         }
@@ -2132,8 +2154,9 @@ class AWSTaskRunner {
             cloud_runner_logger_1.default.log(`Cloud runner job has finished successfully`);
             return { output, shouldCleanup };
         }
-        if (taskData?.stoppedReason === 'Essential container in task exited' && exitCode === 1) {
-            throw new Error('Container exited with code 1');
+        if (taskData?.stoppedReason === "Essential container in task exited" &&
+            exitCode === 1) {
+            throw new Error("Container exited with code 1");
         }
         throw new Error(`Task failed`);
     }
@@ -2172,10 +2195,11 @@ class AWSTaskRunner {
                 if (tasks.tasks?.[0]) {
                     return tasks.tasks?.[0];
                 }
-                throw new Error('No task found');
+                throw new Error("No task found");
             }
             catch (error) {
-                const isThrottle = error?.name === 'ThrottlingException' || /rate exceeded/i.test(String(error?.message));
+                const isThrottle = error?.name === "ThrottlingException" ||
+                    /rate exceeded/i.test(String(error?.message));
                 if (!isThrottle || attempt === maxAttempts) {
                     throw error;
                 }
@@ -2198,15 +2222,17 @@ class AWSTaskRunner {
         let shouldReadLogs = true;
         let shouldCleanup = true;
         let timestamp = 0;
-        let output = '';
+        let output = "";
         while (shouldReadLogs) {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             const taskData = await AWSTaskRunner.describeTasks(clusterName, taskArn);
-            ({ timestamp, shouldReadLogs } = AWSTaskRunner.checkStreamingShouldContinue(taskData, timestamp, shouldReadLogs));
-            if (taskData?.lastStatus !== 'RUNNING') {
+            ({ timestamp, shouldReadLogs } =
+                AWSTaskRunner.checkStreamingShouldContinue(taskData, timestamp, shouldReadLogs));
+            if (taskData?.lastStatus !== "RUNNING") {
                 await new Promise((resolve) => setTimeout(resolve, 3500));
             }
-            ({ iterator, shouldReadLogs, output, shouldCleanup } = await AWSTaskRunner.handleLogStreamIteration(iterator, shouldReadLogs, output, shouldCleanup));
+            ({ iterator, shouldReadLogs, output, shouldCleanup } =
+                await AWSTaskRunner.handleLogStreamIteration(iterator, shouldReadLogs, output, shouldCleanup));
         }
         return { output, shouldCleanup };
     }
@@ -2216,7 +2242,8 @@ class AWSTaskRunner {
             records = await aws_client_factory_1.AwsClientFactory.getKinesis().send(new client_kinesis_1.GetRecordsCommand({ ShardIterator: iterator }));
         }
         catch (error) {
-            const isThrottle = error?.name === 'ThrottlingException' || /rate exceeded/i.test(String(error?.message));
+            const isThrottle = error?.name === "ThrottlingException" ||
+                /rate exceeded/i.test(String(error?.message));
             if (isThrottle) {
                 const baseBackoffMs = 1000;
                 const jitterMs = Math.floor(Math.random() * 1000);
@@ -2227,21 +2254,21 @@ class AWSTaskRunner {
             }
             throw error;
         }
-        iterator = records.NextShardIterator || '';
+        iterator = records.NextShardIterator || "";
         ({ shouldReadLogs, output, shouldCleanup } = AWSTaskRunner.logRecords(records, iterator, shouldReadLogs, output, shouldCleanup));
         return { iterator, shouldReadLogs, output, shouldCleanup };
     }
     static checkStreamingShouldContinue(taskData, timestamp, shouldReadLogs) {
-        if (taskData?.lastStatus === 'UNKNOWN') {
-            cloud_runner_logger_1.default.log('## Cloud runner job unknwon');
+        if (taskData?.lastStatus === "UNKNOWN") {
+            cloud_runner_logger_1.default.log("## Cloud runner job unknwon");
         }
-        if (taskData?.lastStatus !== 'RUNNING') {
+        if (taskData?.lastStatus !== "RUNNING") {
             if (timestamp === 0) {
-                cloud_runner_logger_1.default.log('## Cloud runner job stopped, streaming end of logs');
+                cloud_runner_logger_1.default.log("## Cloud runner job stopped, streaming end of logs");
                 timestamp = Date.now();
             }
             if (timestamp !== 0 && Date.now() - timestamp > 30000) {
-                cloud_runner_logger_1.default.log('## Cloud runner status is not RUNNING for 30 seconds, last query for logs');
+                cloud_runner_logger_1.default.log("## Cloud runner status is not RUNNING for 30 seconds, last query for logs");
                 shouldReadLogs = false;
             }
             cloud_runner_logger_1.default.log(`## Status of job: ${taskData.lastStatus}`);
@@ -2251,10 +2278,13 @@ class AWSTaskRunner {
     static logRecords(records, iterator, shouldReadLogs, output, shouldCleanup) {
         if ((records.Records ?? []).length > 0 && iterator) {
             for (const record of records.Records ?? []) {
-                const json = JSON.parse(zlib.gunzipSync(Buffer.from(record.Data, 'base64')).toString('utf8'));
-                if (json.messageType === 'DATA_MESSAGE') {
+                const json = JSON.parse(zlib
+                    .gunzipSync(Buffer.from(record.Data, "base64"))
+                    .toString("utf8"));
+                if (json.messageType === "DATA_MESSAGE") {
                     for (const logEvent of json.logEvents) {
-                        ({ shouldReadLogs, shouldCleanup, output } = follow_log_stream_service_1.FollowLogStreamService.handleIteration(logEvent.message, shouldReadLogs, shouldCleanup, output));
+                        ({ shouldReadLogs, shouldCleanup, output } =
+                            follow_log_stream_service_1.FollowLogStreamService.handleIteration(logEvent.message, shouldReadLogs, shouldCleanup, output));
                     }
                 }
             }
@@ -2266,10 +2296,10 @@ class AWSTaskRunner {
     }
     static async getLogIterator(stream) {
         return ((await aws_client_factory_1.AwsClientFactory.getKinesis().send(new client_kinesis_1.GetShardIteratorCommand({
-            ShardIteratorType: 'TRIM_HORIZON',
-            StreamName: stream.StreamDescription?.StreamName ?? '',
-            ShardId: stream.StreamDescription?.Shards?.[0]?.ShardId || '',
-        }))).ShardIterator || '');
+            ShardIteratorType: "TRIM_HORIZON",
+            StreamName: stream.StreamDescription?.StreamName ?? "",
+            ShardId: stream.StreamDescription?.Shards?.[0]?.ShardId || "",
+        }))).ShardIterator || "");
     }
 }
 AWSTaskRunner.encodedUnderscore = `$252F`;
@@ -8242,13 +8272,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const node_fs_1 = __importDefault(__nccwpck_require__(87561));
+const node_os_1 = __importDefault(__nccwpck_require__(70612));
 const node_path_1 = __importDefault(__nccwpck_require__(49411));
+const core = __importStar(__nccwpck_require__(42186));
 const cli_1 = __nccwpck_require__(55651);
 const cloud_runner_query_override_1 = __importDefault(__nccwpck_require__(52207));
-const platform_1 = __importDefault(__nccwpck_require__(9707));
 const github_1 = __importDefault(__nccwpck_require__(83654));
-const node_os_1 = __importDefault(__nccwpck_require__(70612));
-const core = __importStar(__nccwpck_require__(42186));
+const platform_1 = __importDefault(__nccwpck_require__(9707));
 /**
  * Input variables specified in workflows using "with" prop.
  *
@@ -8260,7 +8290,7 @@ class Input {
     static getInput(query) {
         if (github_1.default.githubInputEnabled) {
             const coreInput = core.getInput(query);
-            if (coreInput && coreInput !== '') {
+            if (coreInput && coreInput !== "") {
                 return coreInput;
             }
         }
@@ -8275,25 +8305,31 @@ class Input {
         if (process.env[query] !== undefined) {
             return process.env[query];
         }
-        if (alternativeQuery !== query && process.env[alternativeQuery] !== undefined) {
+        if (alternativeQuery !== query &&
+            process.env[alternativeQuery] !== undefined) {
             return process.env[alternativeQuery];
         }
     }
     static get region() {
-        return Input.getInput('region') ?? 'eu-west-2';
+        return Input.getInput("region") ?? "eu-west-2";
     }
     static get githubRepo() {
-        return Input.getInput('GITHUB_REPOSITORY') ?? Input.getInput('GITHUB_REPO') ?? undefined;
+        return (Input.getInput("GITHUB_REPOSITORY") ??
+            Input.getInput("GITHUB_REPO") ??
+            undefined);
     }
     static get branch() {
         if (Input.getInput(`GITHUB_REF`)) {
-            return Input.getInput(`GITHUB_REF`).replace('refs/', '').replace(`head/`, '').replace(`heads/`, '');
+            return Input.getInput(`GITHUB_REF`)
+                .replace("refs/", "")
+                .replace(`head/`, "")
+                .replace(`heads/`, "");
         }
-        else if (Input.getInput('branch')) {
-            return Input.getInput('branch');
+        else if (Input.getInput("branch")) {
+            return Input.getInput("branch");
         }
         else {
-            return '';
+            return "";
         }
     }
     static get gitSha() {
@@ -8303,173 +8339,178 @@ class Input {
         else if (Input.getInput(`GitSHA`)) {
             return Input.getInput(`GitSHA`);
         }
-        return '';
+        return "";
     }
     static get runNumber() {
-        return Input.getInput('GITHUB_RUN_NUMBER') ?? '0';
+        return Input.getInput("GITHUB_RUN_NUMBER") ?? "0";
     }
     static get targetPlatform() {
-        return Input.getInput('targetPlatform') ?? platform_1.default.default;
+        return Input.getInput("targetPlatform") ?? platform_1.default.default;
     }
     static get unityVersion() {
-        return Input.getInput('unityVersion') ?? 'auto';
+        return Input.getInput("unityVersion") ?? "auto";
     }
     static get customImage() {
-        return Input.getInput('customImage') ?? '';
+        return Input.getInput("customImage") ?? "";
     }
     static get projectPath() {
-        const input = Input.getInput('projectPath');
+        const input = Input.getInput("projectPath");
         let rawProjectPath;
         if (input) {
             rawProjectPath = input;
         }
-        else if (node_fs_1.default.existsSync(node_path_1.default.join('test-project', 'ProjectSettings', 'ProjectVersion.txt')) &&
-            !node_fs_1.default.existsSync(node_path_1.default.join('ProjectSettings', 'ProjectVersion.txt'))) {
-            rawProjectPath = 'test-project';
+        else if (node_fs_1.default.existsSync(node_path_1.default.join("test-project", "ProjectSettings", "ProjectVersion.txt")) &&
+            !node_fs_1.default.existsSync(node_path_1.default.join("ProjectSettings", "ProjectVersion.txt"))) {
+            rawProjectPath = "test-project";
         }
         else {
-            rawProjectPath = '.';
+            rawProjectPath = ".";
         }
-        return rawProjectPath.replace(/\/$/, '');
+        return rawProjectPath.replace(/\/$/, "");
     }
     static get buildProfile() {
-        return Input.getInput('buildProfile') ?? '';
+        return Input.getInput("buildProfile") ?? "";
     }
     static get runnerTempPath() {
-        return Input.getInput('RUNNER_TEMP') ?? '';
+        return Input.getInput("RUNNER_TEMP") ?? "";
     }
     static get buildName() {
-        return Input.getInput('buildName') ?? Input.targetPlatform;
+        return Input.getInput("buildName") ?? Input.targetPlatform;
     }
     static get buildsPath() {
-        return Input.getInput('buildsPath') ?? 'build';
+        return Input.getInput("buildsPath") ?? "build";
     }
     static get unityLicensingServer() {
-        return Input.getInput('unityLicensingServer') ?? '';
+        return Input.getInput("unityLicensingServer") ?? "";
     }
     static get buildMethod() {
-        return Input.getInput('buildMethod') ?? ''; // Processed in docker file
+        return Input.getInput("buildMethod") ?? ""; // Processed in docker file
     }
     static get manualExit() {
-        const input = Input.getInput('manualExit') ?? false;
-        return input === 'true';
+        const input = Input.getInput("manualExit") ?? false;
+        return input === "true";
     }
     static get enableGpu() {
-        const input = Input.getInput('enableGpu') ?? false;
-        return input === 'true';
+        const input = Input.getInput("enableGpu") ?? false;
+        return input === "true";
     }
     static get customParameters() {
-        return Input.getInput('customParameters') ?? '';
+        return Input.getInput("customParameters") ?? "";
     }
     static get versioningStrategy() {
-        return Input.getInput('versioning') ?? 'Semantic';
+        return Input.getInput("versioning") ?? "Semantic";
     }
     static get specifiedVersion() {
-        return Input.getInput('version') ?? '';
+        return Input.getInput("version") ?? "";
     }
     static get androidVersionCode() {
-        return Input.getInput('androidVersionCode') ?? '';
+        return Input.getInput("androidVersionCode") ?? "";
     }
     static get androidExportType() {
-        return Input.getInput('androidExportType') ?? 'androidPackage';
+        return Input.getInput("androidExportType") ?? "androidPackage";
     }
     static get androidKeystoreName() {
-        return Input.getInput('androidKeystoreName') ?? '';
+        return Input.getInput("androidKeystoreName") ?? "";
     }
     static get androidKeystoreBase64() {
-        return Input.getInput('androidKeystoreBase64') ?? '';
+        return Input.getInput("androidKeystoreBase64") ?? "";
     }
     static get androidKeystorePass() {
-        return Input.getInput('androidKeystorePass') ?? '';
+        return Input.getInput("androidKeystorePass") ?? "";
     }
     static get androidKeyaliasName() {
-        return Input.getInput('androidKeyaliasName') ?? '';
+        return Input.getInput("androidKeyaliasName") ?? "";
     }
     static get androidKeyaliasPass() {
-        return Input.getInput('androidKeyaliasPass') ?? '';
+        return Input.getInput("androidKeyaliasPass") ?? "";
     }
     static get androidTargetSdkVersion() {
-        return Input.getInput('androidTargetSdkVersion') ?? '';
+        return Input.getInput("androidTargetSdkVersion") ?? "";
     }
     static get androidSymbolType() {
-        return Input.getInput('androidSymbolType') ?? 'none';
+        return Input.getInput("androidSymbolType") ?? "none";
     }
     static get sshAgent() {
-        return Input.getInput('sshAgent') ?? '';
+        return Input.getInput("sshAgent") ?? "";
     }
     static get sshPublicKeysDirectoryPath() {
-        return Input.getInput('sshPublicKeysDirectoryPath') ?? '';
+        return Input.getInput("sshPublicKeysDirectoryPath") ?? "";
     }
     static get gitPrivateToken() {
-        return Input.getInput('gitPrivateToken');
+        return Input.getInput("gitPrivateToken");
     }
     static get runAsHostUser() {
-        return Input.getInput('runAsHostUser')?.toLowerCase() ?? 'false';
+        return Input.getInput("runAsHostUser")?.toLowerCase() ?? "false";
     }
     static get chownFilesTo() {
-        return Input.getInput('chownFilesTo') ?? '';
+        return Input.getInput("chownFilesTo") ?? "";
     }
     static get allowDirtyBuild() {
-        const input = Input.getInput('allowDirtyBuild') ?? false;
-        return input === 'true';
+        const input = Input.getInput("allowDirtyBuild") ?? false;
+        return input === "true";
     }
     static get cacheUnityInstallationOnMac() {
-        const input = Input.getInput('cacheUnityInstallationOnMac') ?? false;
-        return input === 'true';
+        const input = Input.getInput("cacheUnityInstallationOnMac") ?? false;
+        return input === "true";
     }
     static get unityHubVersionOnMac() {
-        const input = Input.getInput('unityHubVersionOnMac') ?? '';
-        return input !== '' ? input : '';
+        const input = Input.getInput("unityHubVersionOnMac") ?? "";
+        return input !== "" ? input : "";
     }
     static get unitySerial() {
-        return Input.getInput('UNITY_SERIAL');
+        return Input.getInput("UNITY_SERIAL");
     }
     static get unityLicense() {
-        return Input.getInput('UNITY_LICENSE');
+        return Input.getInput("UNITY_LICENSE");
     }
     static get dockerWorkspacePath() {
-        return Input.getInput('dockerWorkspacePath') ?? '/github/workspace';
+        return Input.getInput("dockerWorkspacePath") ?? "/github/workspace";
     }
     static get dockerCpuLimit() {
-        return Input.getInput('dockerCpuLimit') ?? node_os_1.default.cpus().length.toString();
+        return Input.getInput("dockerCpuLimit") ?? node_os_1.default.cpus().length.toString();
+    }
+    static get useSpotInstances() {
+        const ınput = Input.getInput("useSpotInstances")?.toLowerCase();
+        return ınput === "true";
     }
     static get dockerMemoryLimit() {
         const bytesInMegabyte = 1024 * 1024;
         let memoryMultiplier;
         switch (node_os_1.default.platform()) {
-            case 'linux':
+            case "linux":
                 memoryMultiplier = 0.95;
                 break;
-            case 'win32':
+            case "win32":
                 memoryMultiplier = 0.8;
                 break;
             default:
                 memoryMultiplier = 0.75;
                 break;
         }
-        return (Input.getInput('dockerMemoryLimit') ?? `${Math.floor((node_os_1.default.totalmem() / bytesInMegabyte) * memoryMultiplier)}m`);
+        return (Input.getInput("dockerMemoryLimit") ??
+            `${Math.floor((node_os_1.default.totalmem() / bytesInMegabyte) * memoryMultiplier)}m`);
     }
     static get dockerIsolationMode() {
-        return Input.getInput('dockerIsolationMode') ?? 'default';
+        return Input.getInput("dockerIsolationMode") ?? "default";
     }
     static get containerRegistryRepository() {
-        return Input.getInput('containerRegistryRepository') ?? 'unityci/editor';
+        return Input.getInput("containerRegistryRepository") ?? "unityci/editor";
     }
     static get containerRegistryImageVersion() {
-        return Input.getInput('containerRegistryImageVersion') ?? '3';
+        return Input.getInput("containerRegistryImageVersion") ?? "3";
     }
     static get skipActivation() {
-        return Input.getInput('skipActivation')?.toLowerCase() ?? 'false';
+        return Input.getInput("skipActivation")?.toLowerCase() ?? "false";
     }
     static ToEnvVarFormat(input) {
         if (input.toUpperCase() === input) {
             return input;
         }
         return input
-            .replace(/([A-Z])/g, ' $1')
+            .replace(/([A-Z])/g, " $1")
             .trim()
             .toUpperCase()
-            .replace(/ /g, '_');
+            .replace(/ /g, "_");
     }
 }
 exports["default"] = Input;
